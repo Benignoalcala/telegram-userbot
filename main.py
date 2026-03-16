@@ -1,13 +1,15 @@
+
+import os
 import asyncio
 import aiohttp
 from telethon import TelegramClient, events
 
-API_ID = "TU_API_ID"
-API_HASH = "TU_API_HASH"
-MAKE_WEBHOOK_URL = "https://hook.us1.make.com/a2p6fy2mnfc88gy9d5cokegwzfk2vg18"
-SOURCE_CHANNEL = "OSINTdefender"
+API_ID = int(os.getenv("API_ID"))
+API_HASH = os.getenv("API_HASH")
+MAKE_WEBHOOK_URL = os.getenv("WEBHOOK_URL")
+SOURCE_CHANNEL = os.getenv("SOURCE_CHANNEL", "OSINTdefender")
 
-client = TelegramClient('session', API_ID, API_HASH)
+client = TelegramClient("session", API_ID, API_HASH)
 
 @client.on(events.NewMessage(chats=SOURCE_CHANNEL))
 async def handler(event):
