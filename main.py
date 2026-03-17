@@ -12,7 +12,7 @@ WEBHOOK_URL = os.environ["WEBHOOK_URL"]
 
 client = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
 
-@client.on(events.NewMessage(chats=SOURCE_CHANNEL))
+@client.on(events.NewMessage(chats=SOURCE_CHANNELS))
 async def handler(event):
     try:
         message_text = event.raw_text or ""
