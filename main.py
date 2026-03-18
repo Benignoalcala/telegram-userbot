@@ -7,7 +7,7 @@ from telethon.sessions import StringSession
 API_ID = int(os.environ["API_ID"])
 API_HASH = os.environ["API_HASH"]
 STRING_SESSION = os.environ["STRING_SESSION"]
-SOURCE_CHANNELS = os.environ["SOURCE_CHANNELS"].split(",")
+SOURCE_CHANNELS = [c.strip() for c in os.environ["SOURCE_CHANNELS"].split(",")]
 WEBHOOK_URL = os.environ["WEBHOOK_URL"]
 
 client = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
