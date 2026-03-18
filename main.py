@@ -17,7 +17,8 @@ async def handler(event):
     try:
         message_text = event.raw_text or ""
         chat = await event.get_chat()
-        chat_username = getattr(chat, "username", None)
+chat_username = getattr(chat, "username", None)
+print("DEBUG CHAT:", chat_username)
 
         # FILTRO DE CANALES
         if chat_username not in SOURCE_CHANNELS:
