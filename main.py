@@ -25,8 +25,8 @@ async def handler(event):
         if not chat_username:
             return
 
-        if chat_username.lower() not in [c.lower() for c in SOURCE_CHANNELS]:
-            return
+        if chat_username and chat_username.lower() not in [c.lower() for c in SOURCE_CHANNELS]:
+    return
 
         message_link = f"https://t.me/{chat_username}/{event.message.id}"
 
