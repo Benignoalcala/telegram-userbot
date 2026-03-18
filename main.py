@@ -21,8 +21,8 @@ chat_username = getattr(chat, "username", None)
 print("DEBUG CHAT:", chat_username)
 
         # FILTRO DE CANALES
-        if chat_username not in SOURCE_CHANNELS:
-            return
+        if not chat_username:
+    return
 async def handler(event):
     try:
         message_text = event.raw_text or ""
@@ -30,8 +30,8 @@ async def handler(event):
         chat_username = getattr(chat, "username", None)
 
         message_link = ""
-        if chat_username:
-            message_link = f"https://t.me/{chat_username}/{event.message.id}"
+        if chat_username.lower() not in [c.lower() for c in SOURCE_CHANNELS]:
+    return
 
         payload = {
             "channel": SOURCE_CHANNEL,
