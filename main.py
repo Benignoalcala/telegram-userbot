@@ -13,20 +13,21 @@ WEBHOOK_URL = os.environ["WEBHOOK_URL"]
 client = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
 
 
-@client.on(events.NewMessage)
+@@client.on(events.NewMessage)
 async def handler(event):
     try:
         message_text = event.raw_text or ""
         chat = await event.get_chat()
         chat_username = getattr(chat, "username", None)
 
-        print("DEBUG CHAT:", chat_username)
-
         if not chat_username:
             return
 
-        if chat_username and chat_username.lower() not in [c.lower() for c in SOURCE_CHANNELS]:
+        if chat_username.lower() not in [c.lower() for c in SOURCE_CHANNELS]:
+            print(f"IGNORADO: {chat_username}")
             return
+
+        print(f"ACEPTADO: {chat_username}")
 
         message_link = f"https://t.me/{chat_username}/{event.message.id}"
 
