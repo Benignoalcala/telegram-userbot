@@ -13,14 +13,18 @@ WEBHOOK_URL = os.environ["WEBHOOK_URL"]
 client = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
 
 
-@@client.on(events.NewMessage)
+@client.on(events.NewMessage)
 async def handler(event):
     try:
         message_text = event.raw_text or ""
         chat = await event.get_chat()
         chat_username = getattr(chat, "username", None)
 
+        print(f"RAW CHAT USERNAME: {chat_username}")
+        print(f"RAW MESSAGE: {message_text}")
+
         if not chat_username:
+            print("IGNORADO: sin username")
             return
 
         if chat_username.lower() not in [c.lower() for c in SOURCE_CHANNELS]:
