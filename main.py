@@ -51,15 +51,21 @@ async def handler(event):
 
 
 async def main():
-    await client.start()
+    await client.connect()
+
+    if not await client.is_user_authorized():
+        raise RuntimeError("La STRING_SESSION no es válida o no fue cargada correctamente.")
 
     me = await client.get_me()
     print("USUARIO DEL BOT:", me.username, me.id)
-
     print("Userbot conectado a Telegram correctamente")
     print(f"Escuchando mensajes nuevos de: {SOURCE_CHANNELS}")
 
     await client.run_until_disconnected()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 
 
 asyncio.run(main())
