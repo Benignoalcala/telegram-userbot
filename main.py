@@ -89,30 +89,30 @@ async def handler(event):
 
         message_link = f"https://t.me/{chat_username}/{event.message.id}"
 
-       media_type = "none"
+        media_type = "none"
 
-try:
-    if getattr(event.message, "photo", None):
-        media_type = "photo"
-    elif getattr(event.message, "video", None):
-        media_type = "video"
-    elif getattr(event.message, "document", None):
-        media_type = "document"
-    elif getattr(event.message, "media", None):
-        media_type = "media"
-except Exception as e:
-    print(f"Error detectando media: {e}")
-    media_type = "none"
+        try:
+            if getattr(event.message, "photo", None):
+                media_type = "photo"
+            elif getattr(event.message, "video", None):
+                media_type = "video"
+            elif getattr(event.message, "document", None):
+                media_type = "document"
+            elif getattr(event.message, "media", None):
+                media_type = "media"
+        except Exception as e:
+            print(f"Error detectando media: {e}")
+            media_type = "none"
 
-payload = {
-    "channel": chat_username,
-    "message_id": event.message.id,
-    "text": message_text,
-    "date": str(event.message.date),
-    "link": message_link,
-    "has_media": media_type != "none",
-    "media_type": media_type,
-}
+        payload = {
+            "channel": chat_username,
+            "message_id": event.message.id,
+            "text": message_text,
+            "date": str(event.message.date),
+            "link": message_link,
+            "has_media": media_type != "none",
+            "media_type": media_type,
+        }
 
         # Requests es bloqueante; lo mandamos a hilo para no trabar el loop
         await asyncio.to_thread(post_to_make, payload)
