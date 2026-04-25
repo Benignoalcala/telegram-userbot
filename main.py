@@ -89,13 +89,26 @@ async def handler(event):
 
         message_link = f"https://t.me/{chat_username}/{event.message.id}"
 
-        payload = {
-            "channel": chat_username,
-            "message_id": event.message.id,
-            "text": message_text,
-            "date": str(event.message.date),
-            "link": message_link,
-        }
+        media_type = "none"
+
+if event.message.photo:
+    media_type = "photo"
+elif event.message.video:
+    media_type = "video"
+elif event.message.document:
+    media_type = "document"
+elif event.message.media:
+    media_type = "media"
+
+payload = {
+    "channel": chat_username,
+    "message_id": event.message.id,
+    "text": message_text,
+    "date": str(event.message.date),
+    "link": message_link,
+    "has_media": media_type != "none",
+    "media_type": media_type,
+}
 
         # Requests es bloqueante; lo mandamos a hilo para no trabar el loop
         await asyncio.to_thread(post_to_make, payload)
