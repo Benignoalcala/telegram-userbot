@@ -89,7 +89,7 @@ async def handler(event):
 
         message_link = f"https://t.me/{chat_username}/{event.message.id}"
 
-        media_type = "none"
+       media_type = "none"
 
 if event.message.photo:
     media_type = "photo"
