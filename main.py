@@ -91,14 +91,18 @@ async def handler(event):
 
        media_type = "none"
 
-if event.message.photo:
-    media_type = "photo"
-elif event.message.video:
-    media_type = "video"
-elif event.message.document:
-    media_type = "document"
-elif event.message.media:
-    media_type = "media"
+try:
+    if getattr(event.message, "photo", None):
+        media_type = "photo"
+    elif getattr(event.message, "video", None):
+        media_type = "video"
+    elif getattr(event.message, "document", None):
+        media_type = "document"
+    elif getattr(event.message, "media", None):
+        media_type = "media"
+except Exception as e:
+    print(f"Error detectando media: {e}")
+    media_type = "none"
 
 payload = {
     "channel": chat_username,
