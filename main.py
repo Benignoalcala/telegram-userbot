@@ -72,49 +72,44 @@ async def handler(event):
         chat = await event.get_chat()
         chat_username = getattr(chat, "username", None)
 
-        print(f"RAW CHAT USERNAME: {chat_username}")
-        print(f"RAW MESSAGE: {message_text[:1000]}")
-
         if not chat_username:
-            print("IGNORADO: sin username")
             return
 
         chat_username_clean = chat_username.strip().lower()
 
         if chat_username_clean not in SOURCE_CHANNELS:
-            print(f"IGNORADO: {chat_username_clean}")
             return
-
-        print(f"ACEPTADO: {chat_username_clean}")
 
         message_link = f"https://t.me/{chat_username}/{event.message.id}"
 
+        # 🔥 DETECCIÓN DE MEDIA
         media_type = "none"
 
         if event.message.photo:
             media_type = "photo"
-
         elif event.message.video:
             media_type = "video"
-
         elif event.message.document:
-            # Detectar si el document es realmente video
-            mime = getattr(event.message.document, "mime_type", "")
-    
-            if mime and "video" in mime:
-                media_type = "video"
-            else:
-                media_type = "document"
-
+            media_type = "document"
         elif event.message.media:
             media_type = "media"
 
-        # Requests es bloqueante; lo mandamos a hilo para no trabar el loop
+        # 🔥 PAYLOAD BIEN DEFINIDO
+        payload = {
+            "channel": chat_username,
+            "message_id": event.message.id,
+            "text": message_text,
+            "date": str(event.message.date),
+            "link": message_link,
+            "has_media": media_type != "none",
+            "media_type": media_type,
+        }
+
+        # 🔥 ENVÍO
         await asyncio.to_thread(post_to_make, payload)
 
     except Exception as e:
         print(f"Error en handler: {e}")
-
 
 # =========================
 # MAIN LOOP
