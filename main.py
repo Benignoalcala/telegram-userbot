@@ -91,28 +91,23 @@ async def handler(event):
 
         media_type = "none"
 
-        try:
-            if getattr(event.message, "photo", None):
-                media_type = "photo"
-            elif getattr(event.message, "video", None):
-                media_type = "video"
-            elif getattr(event.message, "document", None):
-                media_type = "document"
-            elif getattr(event.message, "media", None):
-                media_type = "media"
-        except Exception as e:
-            print(f"Error detectando media: {e}")
-            media_type = "none"
+        if event.message.photo:
+            media_type = "photo"
 
-        payload = {
-            "channel": chat_username,
-            "message_id": event.message.id,
-            "text": message_text,
-            "date": str(event.message.date),
-            "link": message_link,
-            "has_media": media_type != "none",
-            "media_type": media_type,
-        }
+        elif event.message.video:
+            media_type = "video"
+
+        elif event.message.document:
+            # Detectar si el document es realmente video
+            mime = getattr(event.message.document, "mime_type", "")
+    
+            if mime and "video" in mime:
+                media_type = "video"
+            else:
+                media_type = "document"
+
+        elif event.message.media:
+            media_type = "media"
 
         # Requests es bloqueante; lo mandamos a hilo para no trabar el loop
         await asyncio.to_thread(post_to_make, payload)
